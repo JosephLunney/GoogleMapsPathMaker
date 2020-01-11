@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">GoogleMapsPractice</string>
+    <string name="title_activity_maps">Map</string>
+
+    <string-array name="permissions">
+        <item>Fine Location</item>
+        <item>Internet</item>
+        <item>Coarse location</item>
+        <item>Network state</item>
+        <item>External storage</item>
+        <item>Read Storage</item>
+
+    </string-array>
+    <string name="title_activity_maps2">Map</string>
+    <string name="title_activity_maps3">Map</string>
+    <string name="title_activity_floor_plan_maker1">Map</string>
+    <string name="title_activity_map_file_generator1">Map</string>
+
+
+</resources>
