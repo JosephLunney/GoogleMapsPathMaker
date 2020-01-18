@@ -5,6 +5,8 @@ import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,7 +28,6 @@ import java.util.StringTokenizer;
 /*
 * This Activity loads the file saved to exernal storage for later viewing.
 * It requires the external storage permission to work.
-*
 * */
 public class MapFileGenerator1 extends FragmentActivity implements OnMapReadyCallback {
     private static final String TAG = "MapFileGenerator1Test";
@@ -36,6 +37,10 @@ public class MapFileGenerator1 extends FragmentActivity implements OnMapReadyCal
     private boolean firstLine = true ;
 
     private GoogleMap mMap;
+
+    TextView distanceDisplay ;
+    private double distanceTravelled = 0;
+
 
     //Initializes the Activity
     @Override
@@ -50,16 +55,19 @@ public class MapFileGenerator1 extends FragmentActivity implements OnMapReadyCal
         path = getResources().getIdentifier("JosephMapPracticeFile.txt", "raw", getPackageName()) ;
         IS = getResources().openRawResource(R.raw.josephmappracticefile) ;
 
-
+        distanceDisplay = (TextView) findViewById(R.id.distanceDisplay) ;
 
 
     }
 
     //This function triggers when the map is ready
+    //It reads the file and then displays the total distance travelled
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         readMapFile2();
+        distanceTravelled = ((double)((int)(distanceTravelled*100)))/100 ;
+        distanceDisplay.setText("Distance travelled: " + distanceTravelled + " meters");
 
     }
 
@@ -107,8 +115,9 @@ public class MapFileGenerator1 extends FragmentActivity implements OnMapReadyCal
                     mFRLine = buff.readLine() ;
                     temp = createHallway(mFRLine) ;
 
+                    //This is used to move the camera once to first part of the path
                     if (firstLine) {
-                        moveCamera(temp.center, 15);
+                        moveCamera(temp.center, 15f);
                         firstLine = false ;
                     }
 
@@ -134,12 +143,16 @@ public class MapFileGenerator1 extends FragmentActivity implements OnMapReadyCal
         Log.d(TAG, "start: " + start.latitude + ", " + start.longitude) ;
         Log.d(TAG, "end: " + end.latitude + ", " + end.longitude) ;
 
+        //This makes sure that the file is not making halls with the same start and end points
         if (start.latitude != end.latitude && start.longitude != end.longitude) {
            // mMap.addPolyline(new PolylineOptions().add(start).add(end).width(100).color(R.color.PURPLE));
             mMap.addGroundOverlay(hallway.display) ;
         }
 
         Log.d(TAG, "Successful hallway made") ;
+
+        distanceTravelled += getHallwayLength(hallway.lowerBound, hallway.upperBound) ;
+
         return hallway ;
     }
 
@@ -147,6 +160,35 @@ public class MapFileGenerator1 extends FragmentActivity implements OnMapReadyCal
     private void moveCamera(LatLng latLng, float zoom) {
         Log.d(TAG, "moving the camera to: lat: " + latLng.latitude + "lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+    }
+
+    /*
+    * This uses the haversine equation to calculate distances on the earth.
+    * It takes the start and end locations.
+    * It returns the distance between them in meters.
+    * */
+    private double getHallwayLength(LatLng lower, LatLng upper) {
+        final double EARTH_RADIUS = 6378.137 ; //Units are KM
+        double dLat, dLon, a, c,d ;
+
+        dLat = toRad(upper.latitude) - toRad(lower.latitude) ;
+        dLon = toRad(upper.longitude - lower.longitude) ;
+
+        a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lower.latitude * Math.PI / 180) * Math.cos(upper.latitude * Math.PI / 180) *
+                        Math.sin(dLon/2) * Math.sin(dLon/2);
+
+        c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        d = EARTH_RADIUS * c ;
+
+
+        return d * 1000 ;
+    }
+
+    //This function converts angles from degrees to radians
+    private static double toRad(double x) {
+        return (x * Math.PI / 180) ;
     }
 
 

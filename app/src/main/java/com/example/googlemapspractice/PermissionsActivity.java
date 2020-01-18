@@ -47,6 +47,11 @@ public class PermissionsActivity extends AppCompatActivity {
 
     private boolean permissionGuard ;
 
+
+
+    /*
+    * this generates the list and its functionality for diaplying which permissions need to be turned on
+    * */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,24 +76,31 @@ public class PermissionsActivity extends AppCompatActivity {
         if (isServicesOK()) {
             init() ;
         }
+            //Toast.makeText(this, "All permissions must be enabled", Toast.LENGTH_LONG).show(); ;
+
 
     }
 
+    /*This creates the functionality for the button to begin tracking the user */
     private void init () {
         Button buttonMap = (Button) findViewById(R.id.btnMap) ;
         buttonMap.setText("Start tracking") ;
-        buttonMap.setOnClickListener(new View.OnClickListener() {
+        if (allPermissionEnabled()) {
+            buttonMap.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PermissionsActivity.this, FloorPlanMaker1.class);
-                startActivity(intent);
-            }
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(PermissionsActivity.this, FloorPlanMaker1.class);
+                    startActivity(intent);
+                }
 
-        });
-
+            });
+        } else {
+            Toast.makeText(this, "All permissions must be enabled", Toast.LENGTH_LONG).show(); ;
+        }
     }
 
+    /*this function checks if the app can reach google play services */
     public boolean isServicesOK() {
         Log.d(TAG, "isServicesOK: checking google services version");
 
@@ -107,6 +119,7 @@ public class PermissionsActivity extends AppCompatActivity {
         return false;
     }
 
+    /*This loops through the permissions array and updates teh endabledPermissions array on which are enabled */
     private boolean[] checkEnabledPermissions() {
         boolean[] enabledPermissions = new boolean[permissions.length] ;
 
@@ -122,7 +135,9 @@ public class PermissionsActivity extends AppCompatActivity {
 
         return enabledPermissions ;
     }
-
+    /*
+    * This returns true if all the permissions are enabled and false otherwise
+    * */
     private boolean allPermissionEnabled() {
 
         for (int i = 0; i < permissions.length; i++) {

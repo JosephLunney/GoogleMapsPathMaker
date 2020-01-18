@@ -119,6 +119,10 @@ public class FloorPlanMaker1 extends FragmentActivity implements OnMapReadyCallb
         Log.d(TAG, "moving the camera to: lat: " + latLng.latitude + "lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
+    /*
+    * This function takes the location and stores it into the external file currently being written
+    *
+    * */
 
     private void handleLocation(Location location) {
         if (pathHasStarted) {
@@ -162,6 +166,10 @@ public class FloorPlanMaker1 extends FragmentActivity implements OnMapReadyCallb
 
     }
 
+    /*
+    * This function checks whether the External Storage permission is enabled
+    *
+    * */
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -172,8 +180,10 @@ public class FloorPlanMaker1 extends FragmentActivity implements OnMapReadyCallb
 
     //This goes to the map file generator activity to show the user their path
     public void goToPathViewer() {
+
+        //Checks if the file has been saved
         if (!ended) {
-            endApplication(); 
+            endApplication();
         }
 
         Intent intent = new Intent(FloorPlanMaker1.this, MapFileGenerator1.class) ;

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GoogleMapsPractice</string>
+    <string name="app_name">Google Maps Path Maker</string>
     <string name="title_activity_maps">Map</string>
 
     <string-array name="permissions">

@@ -114,6 +114,10 @@ public class Hallway {
 
     }
 
+    /*
+    * This function uses the haversine equation to calculate distances between points on the earth.
+    *It takes two points as parameters and returns the distance between them in meters.
+    * */
     private double getHallwayLength(LatLng lower, LatLng upper) {
         final double EARTH_RADIUS = 6378.137 ; //Units are KM
         double dLat, dLon, a, c,d ;
@@ -133,6 +137,10 @@ public class Hallway {
         return d * 1000 ;
     }
 
+    /*
+    * This function takes the start and end point of a hallway and calulates the angle between them.
+    * It returns the angle as a bearing (clockwise from north) in degrees
+    * */
     private float getAngle(LatLng start, LatLng end) {
         LatLng rightAnglePoint = new LatLng(start.latitude, end.longitude) ;
         double hypotenuse, adjacent, angle ;

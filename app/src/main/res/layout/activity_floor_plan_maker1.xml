@@ -46,17 +46,17 @@
 
     <Button
         android:id="@+id/viewPathButton"
-        android:layout_width="98dp"
+        android:layout_width="128dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="243dp"
-        android:layout_marginLeft="243dp"
-        android:layout_marginEnd="70dp"
-        android:layout_marginRight="70dp"
+        android:layout_marginStart="229dp"
+        android:layout_marginLeft="229dp"
+        android:layout_marginEnd="54dp"
+        android:layout_marginRight="54dp"
         android:layout_marginBottom="30dp"
         android:text="View path" />
 
